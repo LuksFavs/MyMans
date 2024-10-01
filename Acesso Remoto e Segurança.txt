@@ -1,0 +1,78 @@
+Acesso Remoto e Segurança
+
+SSH - protocolo de acesso remoto a dispositivos 
+
+troca de dados segura entre 2 computadores pela internet
+
+protege a privacidade e a integridade, dados e arquivos transferindo com criptografia de ponta a ponta
+
+sshd -> daemon responsavel por implementar esse protocolo
+
+openssh-server -> pacote
+
+usar systemctl status sshd(ssh para ubunto) para ver se o servidor esta rodando
+usar systemctl enable sshd(ssh para ubunto) para habilitar o servidor esta rodando ele roda na porta 22.
+usar systemctl start sshd(ssh para ubunto) para startar o servidor esta rodando ele roda na porta 22.
+
+firewall -> configurar para podermos ter acesso
+	no ubunto usar ufw allow ssh / ufw enable / ufw start
+	iptables   -> 	temos que decidir a política
+			firewall em nivel de pacotes, baseado no endereço/portaorigem/destino
+			tambem usado para moitorar trafego de redes, fazer NAT, redirecionar pacotes, marcar pacotes
+			, modificar prioridades daqueles que chegam e saem, contagem de bytes, dividir o tráfego
+			entre maquinas criar anti-spoofing, contra syn floods, Dos etc.
+		   ->	trafego de maquinas desconhecidas a rede pode ser bloqueado/registrado atraves do uso de			regras simples
+			REGRAS: comandos para o iptables que realiza uma determinada ação, regras sao armazenadas em
+				cadeias e são processadas na ordem de inserssão
+				elas são armazenadas no núcleo(kernel) assim sendo perdido quando o computador é
+				reiniciado, por isso devem sser gravadas em um arq para serem carregadas depois.
+
+			
+			Temos 3 tabelas pré-definidas com chains:
+				filter(default) nat mangle:
+					filter 	-> input - consultado para dados que chegam
+						-> forward - consultado para dados que são redirecionados
+						-> output - consultado para dados que saem
+						(input e output so são atravessados por conexoes saindo/originando no
+						servidor local)
+					nat 	-> prerouting consultado quando os pacotes chegam
+						-> output consultado localmente antes de serem roteados
+						-> postrouting consultado quando os pacotes após o rounting								
+					mangle	-> todas
+			
+			sintaxe:
+				iptables [-t table] -D chain rulenum
+				iptables [-t table] -[LFZ] [chain]
+				iptables [-t table] -A chain rule-spec
+				onde:
+					-t indica a tabela
+					-D remove a regra relenum da chain
+					-L lista as regras
+					-Z inicia os contadores
+					-F apaga as regras
+					-A acrescenta uma regra
+					-j jump para ação caso o pacote corresponda ao padrão definido pela regra:
+						podem ser: ACCEPT, DROP, REJECT, LOG.
+				regras:
+					-p protocolo
+					--src origem
+					--dest destino
+					-i interface de entrada
+					-o interface de destino
+					--sport porta origem tcp/udp
+					--dsport porta destino tcp/udp
+				guardando:
+					temos o arquivo /etc/iptables-save
+					faço iptables-save > /etc/iptables-save
+					para restaurar:
+					cat /etc/iptables-save | iptables-restore
+				
+				Nat com iptables:
+					interface externa DHCP, interna é fixa
+					endereço interno segue RFC 1918 - 192.168.0.0/16, 10.0.0.0/8 etc.
+					editar arquivo /etc/sysctl.conf, colocando:
+						net.ipv4.ip_foward=1
+						net.ipv6.conf.default.forwarding=1
+					execvute depois sysctl -p
+												
+

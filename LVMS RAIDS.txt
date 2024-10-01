@@ -1,0 +1,75 @@
+HDs tem vários discos, ambas as superficies do disco podem receber sinais.
+
+No Linux,
+cada tipo tem sua inicial -> IDE = hd; SATA, SCI, USB -> sd
+podemos criar partições com o fdisk
+fsck -> verificar e reparar o sistema de arquivos
+fuser -> verifica qual processo esta usando uma partição especifica
+
+Para montar a partição permanentemente, tenho q mudar o /etc/fstab
+no formato:
+
+DEVICE DIRETORIO FSTYPE PARAMETROS FS_FREQ FS_PASS -> os dois últimos podem ser 0
+
+para montar todo mundo no fstab usar mount -a
+
+VERIFICAÇÃO DO ESPAÇO LIVRE
+
+df -> informa numero de blocos e inodes livres (df -kh)
+du -> informa o espaço utilizado(em blocos de 512 Bytes) da arvore de diretórios
+
+LVM -> gerenciamento de volumes lógicos
+beneficio-> é mais flexível do que as partições convencionais, e a flexibilidadde na alocação de armazenamento para usuarios e aplicações sem as limitaçõies do tamanho dos discos.
+Ela deve ser montada em um volume fisico normal, com o tipo 8e, assim depois disso ela nao podem ser montadas de maneira normal usando o mount.
+
+Passsos para se criar uma LVM -> funcionam como particoes fisicas
+1 passar um disco para o pvcreate /dev/...
+1.1 pvdisplay mostra os volumes com lvm
+2 vgcreate *nome* /dev/... com o nome do grupo a ser criado, pod add varias particoes
+2.1 para verificar o resultado vgdisplay *nomedogrrupo*
+3 lvcreate -n *nome* -L *tamanho* *nomedogrupo*
+3.1 lvcreate -n *nome* -l *porcentagem*%FREE *nomedogrupo* para usar porcentagem livre do disco
+4 com as particoes logicas criadas, basta formatar elas para os FS que quiser, usando mkfs
+5 uma vez formatados bastar dar mount normalmente
+6 para tornar permanente pegar o uuid com o blkid *nome da part*
+6.1 botar no fstab com a mesma formatação anterior botando o UUID no DEVICE
+
+RAID -> virtualização de armazenamento de dados para fins de redundancia
+tem varias maneiras, cada um tem sua especificação e motivo
+
+RAID 0 -> "stripping", sem emparelhamento ou paridade -> capacidade = soma dos discos
+	  não redundancia para lidar com falhas de disco, uma falha causa a perda de todo o volume raid 0
+          O stripping distribui o contedo dos arquivos mais ou menos igualmente entre todos os discos, oq faz as operações de leitura e escrita aconteca simultaneamene em vários discos, melhorando o desempenho.
+
+RAID 1 -> Espelhamento, sem paridade ou stripping.
+	  Os dados sao gravados identicamente nas unidades disponiveis(duas ou mais)
+	  Assim qualquer pedido de leitura pode ser respondido por qualquer unidade do conjunto, assim sendo a primeira que chegar nos dados, melhorando o desempenho.
+	  A escrita e sempre mais lenta qua o Raid 0 e ele funciona ate o ultimo elemento do disco estiver disponivel
+
+RAID 10 ->  precisa de 4 discos -> eles são agruados em pares para espelhamento. 
+	    entre os grupos os dados sao stripped, dentro do grupo é espelhado e entre grupos é striped
+	    sao utilizados quando quero melhor desempenho sem sacrificar confiabilidade
+
+RAID 01 -> preciso de 3 discos, mais utilizado com 4 ->  entre os grupos é espelhado e dentro do grupo é striped
+
+RAID 10 vs 01 -> desempenhon é o mesmo, e a capacidade de armazenamento também. raid 01 tem menor tolerancia a falhas -> RAID 10 É MELHOR
+
+RAID 5 -> pelo menos 3 discos ->  stripping em nivel de bloco com paridade distribuida -> precisa que todas as unidades estejam (tirando uma) operando sem problemas -> em caso de falha de uma unica unidade pode se recuperar os dados com calculos de paridade. Tem tempo de reconstrução alto e sua provavel falha. -> Ele perde muito tempo reconstruindo.
+
+RAID 6 -> 4 discos -> stripping em nivel de bloco e paridade distribuida dupla -> tem tolerancia a falha de ate duas unidades - faz com que grupos maiores sejam mais praticos -> uma unica falha gera desempenho reduzido em toda a matriz ate sua recuperação. -> pode resolver problemas do RAID 5 se usarmos multiplas fontes e fabricantes, quanto maior a capacidade das unidade e do tamanho do array maior a importancia de se usar o RAID 6 ao invez do 5.
+Voce pode utilizar enquanto recontrol.
+
+CRIAÇÃO de RAIDS
+
+comando mdadm --create --verbose */dev/nome* --level=linear --raid-device=2 *nome dos discos a serem usados* 
+verificar em /proc/mdstat
+depois montar o fs e montar de maneira normal.
+
+
+
+
+
+
+
+
+

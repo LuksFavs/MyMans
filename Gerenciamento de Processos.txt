@@ -1,0 +1,110 @@
+Gerenciamento de Processos
+
+Processos possuem:
+	dispositivos padrões de entrada, saída e saída de erro.
+	um dono
+	prioridade de execução (nice) e um estado de processo associado
+	pode ser exec em fore ou background
+	pode disparar outros processos
+	tem identificador único PID
+	Atributos:
+		tem UID, numero do usuário q executou o programa.
+		EUID: 	efective user id, determina o direito de acesso do processo ao sistema
+			pode ser diferente do UID se o arquivo do programa tiver setuid ativado
+			nesse caso o EUID e UID serão iguais
+	Sinais:
+		comunicação entre processos
+		STOP - suspende processo
+		TERM - Terminar de maneira ordenada o processo
+		KILL - matar processo imediatamente
+		CONT - reassume a execução
+		SEFV - Erro de endereçamento de memoria
+		ILL - informa erros de execução de instrução ilegais/divisão por 0
+
+	comando kill:
+		$ kill -SINAL PID
+	
+	Estados do processo:
+		D - Dormindo
+		R - executando/na fila de execução
+		S - Sleeping
+		T - Parado
+		W - Paginando(não suportado mais)
+		X - morto
+		Z - zumbi
+	
+	preg e pkill:
+		procura os processos que estão em execução e que combina com as info passadas
+		pkill, faz a mesma coisa passando um sinal TERM por padrão para eles
+	
+	nice e renice:
+		quanto maior o Nice menor sua prioridade de execução
+		$ nice -n -5 ntpd -> prioridade alta
+		renice para processos em execução
+		-u - alteração dos processos de um usuario informados
+		-g - altera processos de um grupo indicado
+		-p - altera o processo de ppid informado
+		$ renice +19 1000 -u Gabriel -> alterou o processo de pid 1000 e os processos do usuário Gabriel.
+	
+	ps:
+		mostra os processos em no sistema, sem parametros mostra apenas os do usuario
+		a - mostra todos os processos existentes
+		e - exibe variaveis de ambients relacionadas aos processos
+		f - arvore de execução dos processos
+		l - exibe mais campos
+		m - mostra quantidade de memoria ocupadas
+		u - exibe o nome do usuario que iniciou o processo e a hora
+		x - processos que nao estao associados a terminais	
+	fuser:
+		qual proceso faz uso de um determinado arquivo ou diretorio
+		$ fuser -opcao caminho
+		k - finaliza processo que utiliza o caminho
+		i - usada junto com k pedindo permissao para termina-lo
+		u - mostra proprietario do processo
+		v - resultado e mostrado semelhante ao ps
+
+	top: 
+		coleta infos sobre processos e as atualiza regurlamente, geralemnte a cada 10 segundos
+		$ top -opcao
+		d # - atializa o top apos # segudnos
+		c - exibe a linha de comando em vez do nome do processo
+		i - ignora processos zumbi
+		s - modo seguro
+		tem varios atalhos de teclados - espaco para atualizar, q para finalizar, h pressionado para help
+	
+	jobs:
+		listar processos em execução/ 2 plano
+	
+	fg e bg:
+		bg eu preciso primeiro paralizar o processo(ctrl + z) depois $ bg +numero (numero do jobs)
+		$ fg + numero)
+	
+	pstree:
+		mostra os processos relacionados em formato de arvore
+		u - mostra proprietario
+		p - PID dos processos
+		c - relacao de processos ativos
+		G - mostra so oq cabe na tela
+	
+	bohup:
+		deixa processo ativo mesmo no logout
+	
+	free:
+		mostra total livre e utilizado da memoria fisica, area de swap do sistema e dos buffers do nucleo
+		ignorar coluna de memoria compartilhada(ta obsoleta)
+		b - total em bytes
+		k - em kbytes
+		m - megabytes
+		t - linha com totalização dos valores
+		s # - monitoramento continuo de intervalo # segundos.
+
+	cron:
+		programa tarefas periodicas em dias e datas determinados
+		utiliza crontab -> fica no /etc ou em cada usuario no /var/spoll/cron
+		dentro da crontab -> 
+			# tarefa 1 comentario
+			30 22 2,10 * * echo "blablabla"
+			executa a frase as 22 hras e 30 min nos dias 2 e 10 em todos os meses e todos os dias da
+			semana
+			 
+	

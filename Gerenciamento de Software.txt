@@ -1,0 +1,44 @@
+Gerenciamento de Software
+
+Pacotes binários:
+	Gerenciadores de pacotes fazem o trabalho de achar e recolher os pacotes desejados, realizarem o update e remoção de pacotes.
+	
+	tipos:
+		.deb -> padrão do debian e derivados, pacotes instalados usando a ferramenta apt-get ou dpkg
+		.rpm -> padrão RedHat/fedora e derivados, usamos o yum ou rpm.
+		.tgz -> padrão slackware e derivados.
+
+	yum(sendo mudado para dnf):
+		yum install ...
+		yum remove ...
+		yum search ...
+		yum check-update -> baixa as listas de pacotes disponiveis
+		yum update ... -> pacote especifico, sem o ... é todos os pacotes
+		yum upgrade -> mais incisivo, inclue pacotes obsoletos
+	
+	rpm:
+	-h help
+	-q consultas
+	-i install
+	-U atualiza 1 pacote
+	-e remove pacote
+
+	apt-get:
+	apt-get update -> atualiza os repositorios locais quanto a processos
+	apt-get install ... -> update + install atualiza um só, aquele sendo instalado
+	apt-get remove ... 
+	apt-get upgrade -> atualiza todos os pacotes ao mesmo tempo
+	repositorios usados estao em /etc/apt/source.list
+	
+	dbkg:
+	gerenciador local, nao pode baixar, so instalar, remover e construir pacotes.
+	-h help
+	-l list
+	-i install
+	-r remove
+	Ele nao verifica dependencias, para verificar e melhor rodar o apt-get -f install depois
+	
+	atualizações automaticas:
+	sudo apt-get install unattended-upgrades -> pacote para atualizacoes automaticas
+	/etc/apt/apt.conf.d/50unan... -> opcoes do unatended
+	/etc/apt/apt.conf.d/10periodic -> para poder habilitar

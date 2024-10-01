@@ -1,0 +1,53 @@
+Administração de usuários
+
+conteúdo do /etc/passwd:
+- nome (tipocamente 8 char)
+- UID (numero único de cada usuário)
+- Grupo (Group ID)
+- Diretorio Home ( Localização dos arquivos dos usuários )
+- Shell
+
+
+arquivos de configuração
+Onde acontece a inicialização de variáveis do sistema, como o PATH PS1 umask etc.
+são eles
+.bashrc, .bash_profile, .bash_login, .profile se for bash
+.profile se for sh ou ksh
+.cshrc e .login para csh
+
+Criação de usuários
+adduser -c "nome" --ingroup grupo username
+vipw edita o arquivo de senhas( passwd o shadow )
+
+Manipulação de senhas
+passwd [opcoes] conta
+altera senha, shell ou comentário sobre o user.
+pode adotar padrão para a senha
+pode ter data de expiração
+pode botar período de troca de senha
+pode ter validade de senha
+ex: passwd -x 10 -w 3 -i 2 joffre -> a senha do joffre expirara em 10 dias, sendo ele avisado faltando 3 dias, depois de expirado o usuário tem 2 dias para trocar de senha antes da conta ser desativada.
+
+
+Info dos usuários
+users ou who -> mostra os nomes de logins dos usuários conectados
+whoami ou logname -> mostra os nomes de login do usuário atual
+groups -> mostra os grupos do usuário atual
+finger -> mostra info sobre o usuário contida na tabela do passwd e o ultimo login dele
+chfn -> muda as info que o finger mostra
+
+Deleção de usuários
+userdel [conta] -> opção -r remove todo o diretório home do usuário
+
+Chaveamento de usuários
+(troca de permissões)
+su [conta] -> muda de um usuário para o conta.
+su -> vai pro super user
+su - -> muda pro super e roda o bashrc
+sudo -> executa um comando como outro usuário
+/etc/sudoers -> tem a permissoes e privilegios que cada usuario ou grupos podem ter. usar visudo para alterar esse arquivo.
+
+
+
+
+

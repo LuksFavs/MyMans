@@ -1,0 +1,95 @@
+Copias de Segurança
+
+BackUps completos (BUC) -> copia tudo para a mídia de backup, não atualiza apenas os mudados mas sim tudo
+			   Vantagem -> Fácil localozação de arquivos, requer apenas uma media
+			   Desvantagem -> é demorado, se arquivos pouco editados backups serão quase identicos
+
+BackUps Incrementais (BUI) -> Verifica a data de modificação do arquivo pra decidir se ira realizar o BU ou não.
+			      Assim arquivos não modificados não entram nesse BU, ele não é cumulativo.
+			      Ele é usado em conjunto com o BUC(faz BUC semanal, com BUI diarios)
+			      Principal Vantagem -> mais rápido que BUC
+			      Desvantagem -> Restauração depende de olhar um ou mais BUIs até achá-lo
+			      Para restaurar um sistema completo, devo pegar o ultimo BUC e todos os BUIs
+			      subsequentes, levando assim mais tempo que o BUD
+
+Backups Diferencial (BUD) -> São similares ao BUI, entram apenas modificados, só que ele é acumulativo.
+			     I.é quando ele foi modificado, ele entra no BUD e em todas as subsequentes ele continua
+			     lá até o proximo BUC.
+			     Assim o BUD contém todos os arquivos modificados desde o ultimo BUC.
+			     Restauração é só ultimo BUC e o ultimo BUD.
+			     Vantagem -> Recuperação depende apenas do BUD e BUC e ele é mais rapido que o BUC
+			     Desvantagem -> a restauração completa do sistema pode levar mais tempo que o BUC, se 					    tiver muitas mudanças no sistema pode levar mais tempo que o incremental
+
+Comando dd  -> 	copia arquivos em baixo nivel, ignorando a formatação dos arquivos.
+	      	utilizado em cópia de imagens
+	      	util na recuperação de sistemas de arquivos
+	      	dd [opções=valor]
+	      	opções: if="arquivo de entrada" of="arquvio de saida" 
+		        ibs=tamanho bloco entrada, obs=tamanho bloco saida, bs=tamanho ambos os blocos 
+		        skip=n/seek=n saltam n blocos do arquivo de entrada/saida antes de copiar
+		        count=n copia n blocos
+		$dd if=/dev/sdb of=/tmp/disc 
+
+Comando TAR -> 	empacota arquivos em dispositivos ou em arquivos
+    		permite backup de arqs de diversos sitemas 
+		permite o backup de arvores de diretorios com path relativo
+		permite compactação
+		permite multivolume no gnu
+		tar opcoes [parametros] arquivos
+		opcoes:	
+			c   -> 	cria backup em formato tar, arquivos especiais sao ignorados
+			x   ->	restaura os arquivos, diretorios restaurados de maneira recursiva
+				se nenhum nome de arquivo e dado, todos os arquivos do BU sao restaurados
+			v   ->	Verbose
+		parametros:
+			t   ->	lista o coneteudo do BU
+			f   ->	utiliza o prox parametron com entrada ou saida, '-' indica entrada ou saida padrao
+			z   -> 	z efetua compactação em gzip
+			j   ->	em bzip2
+			p   ->	preserva as permissoes dos arquivos copiados
+			--exclude="/dir/*" exclui todos os arquivos de um diretorio
+			-s  ->	mantem a mesma ordem dos arquivos
+			--preserve = -ps
+			--deference = segue os links simbolios e faz BU dos arquivos sendo referenciados
+		BUI em tar:
+			opção --listed-incremental ou -g   ->	fala pro tar operar em modo incremental, com os
+								dados de referencia armazenados em um arq snapshot.
+								se snapshot nao existir ele faz BUC.
+								depois sera gerado um com apenas os arqs mudados.
+								quando extrair destes arquivos incrementais, os
+								arqs e diretorios que nao existiam quando o BU
+								foi criado serão apagados.
+
+		$tar -zcvpf backup.tar.gz -g snapshot_01 /home
+
+Comando rsync->	comando versatile que pode ser usado como ferramenta de backup/espelhamento, oferecendo
+		facilidades.
+		ele copia apenas as diffs dos arqs que sofreram mudancas, que são compactados e então enviados com
+		uso do ssh se vc quiser.
+		Facilidades:
+			Suporte para copia de links, disp. especiais, direitos de prop., grupos e permissoes de arq
+			Opçoes de exclusoes similares ao gnu tar e cvs.
+			não precisa ser root.
+			tranferencia de arqs em modo pipeline minimiza latencias.
+			Suporte para operações anonimas ou autenticadas.
+		Uso:
+			preparar uma maquina para ser servidor rsync:	-> editar o /etc/rsync.conf.
+									-> $rsync -- daemnon
+			qualquer numero de maquinas com rsync pode sincronizar de/para servidor.
+			Vc pode usar isso para fazer copias de segurança ou expalhar sistemas de arqs de forma
+			eficiente.
+			Cliente->opções:  -> 	verbose, progress, stats -> acompanha a execução.
+						compress, rsh -> especifica q vc qr compressao e usar ssh.
+						recursive -> quer recursão nos diretorios.
+						times, perms -> preserva permissoes e datas.
+						links -> copia links simbiolicos.
+						delete -> apaga no servidor aqueles que forem apagados no cliente.
+						
+OUTRAS OPCOES: amanda.org ou bacula.org
+
+
+
+
+
+
+

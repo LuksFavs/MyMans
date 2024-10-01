@@ -1,0 +1,33 @@
+Gerenciamento de redes
+
+redes locais conceitos:
+	Interfaces de redes -> ETHN no Linux -> cada uma recebe indereco IP, pode ser configurado:
+		manualmente por ipconfig, no boot ou automaticamente(talvez precise baixar o pacote net-tools)
+	para checar as configuraçoes de redes da minha distribuição: ifconfig -a | grep eth 
+	ou lshw -class network
+	nomes logicos das interfaces podem ser auterados, olhar o arquivo:
+	/erc/udev/rules.d/70-persistent-net.rules.
+	ethtool -> usado para modificar valores da interface de rede como velocidade da porta e modos.
+	para tornar permanente botar ethtool no arq /etc/network/interfaces ou /etc/networks
+	posso usar ifconfig para mudar o ip manualmente.
+	ifconfig eth0 -> verifica as configurações
+	ifup -> habilita o funcionamento de uma interface
+	ifdown -> desabilita " " "
+	
+	Config estatica -> configurar arquivo /etc/network/interfaces
+	Config Dinamica -> DHCP local -> no DHClient deve ter arq de conf /etc/dhclient.conf
+
+	configuração de rotas:
+		padrao -> route add default gw 10.0.0.1 eth0
+			  route -n -> verifica configuração
+		dinamico -> realizado por um protocolo de roteamento.
+
+	colocando hostname -> hostname nome
+				/etc/host. -> nome das maquinas 
+	Config de DNS ->   /etc/resolv.conf.
+
+	DHCP -> recebe automaticamente infos de um servidor -> pq usar? facilidade de manutenção.
+		DHCP -> dhcp3-server -> pacote do dhcp -> botar na /etc/default/dhcp3-server as interfaces que o servidor deve atender, padrao eth0.
+		/etc/dhcp3/dhcpd.conf -> configuração do dhcp
+	
+	sincronizaçãio de relogio -> NTP -> protocolo de sincronização de tempo -> ntpdate ou ntpd()

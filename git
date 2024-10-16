@@ -1,0 +1,41 @@
+para configurações fazer:
+$ git config [--global] ...
+
+para inicializar um projeto, ele cria uma branch com nome master(pode ser alterado)
+$ git init
+
+para adicionar coisas ao commit:
+$ git add (. ou nomes dos arquivos especificos)
+
+para commitar:
+$ git commit -m "mensagem do commit"
+
+para ver mudancas feitas por alguem antes de dar pull:
+$ git fetch (caminho do git) (branch)
+$ git log -p HEAD..FETCH_HEAD -> mostra apenas aquilo de diferente na branch colaborativa
+.. -> tudo alcancavel pela dele mas nao pela minha
+... -> tudo alcancavel pela dele ou pela minha, mas nao as duas
+para puxar mudanças:
+$ git pull (caminho) (branch)
+CUIDADO, ELE DA MERGE AUTOMATICO, ACONSELHAVEL DAR COMMIT ANTES PARA NAO PERDER NADA.
+
+para nao ficar sempre usando o caminho completo podemos salva-la em uma constante:
+$ git remote add (nome da constante) (caminho)
+
+qndo dou fetch com isso ele guarda em uma branch separada (nome constante)/(branch):
+$ git log -p (minhaBranch)..(constante)/(branchDele)
+
+depois do fetch posso fazer o merge se estiver tudo certo:
+$ git merge (constante)/branch
+$ git pull . remotes/(constante)/(branch)
+
+ver depois: git log
+
+ex: 
+echo "# Rede Neural" >> README.md
+git init
+git add README.md
+git commit -m "first commit"
+git branch -M main
+git remote add origin git@github.com:LuksFavs/RedeNeural.git
+git push -u origin main

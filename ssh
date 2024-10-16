@@ -1,0 +1,21 @@
+passcode: Gallipoli
+
+para criar uma ssh:
+$ ssh_keygen -t ed25519 -C "email"
+ele pedira pra confirmar o local de geracao, se quiser mudar é
+so mudar o id_ALGO para o nome escolhido
+
+escolhe uma passphrase
+depois inicia o ssh-agent no bg:
+1 - $ eval "$(ssh-agent -s)"
+
+e roda ssh-add:
+2 - $ ssh-add ~/.ssh/nomedoSSH
+
+fazer 1 e 2 toda vez que iniciar para evitar de se colocar a passphrase toda hora
+
+para adicionar no github:
+copia a chave publica:
+$ cat ~/.ssh/id_ed25519.pub
+
+e vai pro github e continua la na aba de ssh

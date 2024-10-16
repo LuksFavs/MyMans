@@ -1,0 +1,32 @@
+zip -> comprime cada arquivo individualmente, pode descomprimir individualmete tbm.
+tar -> junta todos os arquivos em um (archive) só para depois comprimir.
+
+para criar usar:
+$ zip -r <nomedozip> <nomes para zippar>...
+
+para deletar do zip:
+$ zip -d <nomedozip> <nomeparadeletar>...
+
+para adicionar em um zip ja existente:
+$ zip <nomedozip> <nomedoarq>...
+
+para criar tar(usar -v para ver o progresso)
+$ tar -cf <nomedotar> <nomedosarquivos>...
+
+para add arquivos:
+$ tar -rf <nomedotar> <arquivos>...
+
+para retirar:
+$ tar -xf <nomedotar> <arquivos>...
+
+para ver o conteudo de um tar:
+$ tar -tf <nomedotar>
+
+para comprimir em gzip adicionar a flag -z com o c
+para descompactar um arqs -z com x, se nao der argumentos para -zx ele descompacta e retira tudo do tar.
+mesma logica para bzip2(mais compactado ainda, mas mais demorado) so q -j em vez de -z
+
+para descompactar ele todo
+$ gzip -d <nomedotar> 
+ou
+$ tar -(z|j)x <nomedotar>

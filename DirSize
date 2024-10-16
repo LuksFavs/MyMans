@@ -1,0 +1,4 @@
+for finding directories size use:
+$du -hs <name of dir>
+
+$du -hsc * list all directories in current dir with sizes

@@ -1,0 +1,9 @@
+go to pacman.d where the keys are stored
+$ cd /etc/pacman.d/
+
+delete the gnupg file
+$ sudo rm -r gnupg
+
+run pacman-key --init and pacman-key --populate
+
+pacman-keys -> manage pacmans list of trusted keys

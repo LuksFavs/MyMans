@@ -1,0 +1,37 @@
+podemos ver as permições e grupos dos arquivos usando: "ls -la"
+
+com isso podemos ver diversas infos dos arquivos como tipo:
+ d : diretorio
+ - : arquivo normal
+ b : bloco
+ c : para dispositivos de caracteres
+ l : link simbólico
+ p : FIFO ou NamedPipe
+ s : para socket
+
+fora isso temos as permissoes RWX, e outras especiais:
+ SUID : o usuário pode executar o arquivo ou diretorio como se fosse dono do mesmo
+ 
+ SGID : o usuário executa o arquivo ou acessa diretório como se fosse membro do grupo dono do arquivo/diretorio, no caso de diretorio novos arquivos ou herdam o grupo do diretorio ou o grupo do criador se o bit estiver desligado
+ 
+ Sticky Bit : o usuário pode criar/alterar/deletar apenas os seus próprios arquivos no diretorio que possui esta permissão. mesmo que não seja dono do diretorio nem membro do gruoi deste. quando ele é usado em um arquivo significa que ele e compartilhado por vários usuários 
+
+como diferenciar:
+ S no campo de dono = SUID
+ s no campo de dono = SUID + permissão de execução para o dono
+ S no campo de grupo = SGID
+ s no campo de grupo = SGID + permissão de execução para o grupo
+ T no campo de outros = Sticky
+ t no campo de outros = Sticky + permissão de execução para os outros usuários do sistema
+
+chown chgrp: -R = RECURSIVE
+ chown = change owner : "chown [-R] usuário arquivo"
+ chgrp = change group : "chgrp [-R] grupo arquivo"
+
+chmod: Permissões
+ "chmod [-R] <op> file"
+ op = quem op perm : 
+  quem = (u)user / (g)group / (o) others / (a) all
+  op = (+) add / (-) remove / (=) define
+  perm = (r) read / (w) write / (x) execute
+ 	

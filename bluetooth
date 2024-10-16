@@ -1,0 +1,20 @@
+para iniciar a placa do bluetooth:
+
+$ systemctl start bluetooth.sevice
+
+depois abri o bluetoothctl:
+
+$ bluetoothctl
+
+lá dentro usar os comandos:
+
+1 - scan <on/off> liga desliga o scan
+2 - pair <DeviceID>
+3 - connect <DeviceID>
+
+após isso pode dar exit no programa sem problemas
+
+quando terminar de usar o bluetooth de:
+
+$ systemctl stop bluetooth.sevice
+
